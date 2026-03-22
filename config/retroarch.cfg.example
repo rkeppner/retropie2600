@@ -1,0 +1,60 @@
+# RetroArch Configuration Example for retropie2600
+# ================================================
+# This file contains the RetroArch settings required for the retropie2600 daemon.
+# Copy these settings into your RetroArch config at: /opt/retropie/configs/all/retroarch.cfg
+
+# ============================================================================
+# NETWORK COMMAND SETTINGS — REQUIRED for retropie2600 daemon
+# ============================================================================
+# The retropie2600 daemon controls shader toggling via UDP network commands.
+# These settings enable RetroArch to listen for the SHADER_TOGGLE command.
+
+# Enable network command interface (required)
+network_cmd_enable = "true"
+
+# Network command port (must match retroarch_port in /etc/retropie2600/switches.yaml)
+network_cmd_port = "55355"
+
+# ============================================================================
+# CRT SHADER SETTINGS — Optional but strongly recommended
+# ============================================================================
+# A CRT shader provides an authentic Atari 2600 display experience.
+# The zfast-crt shader is optimized for Raspberry Pi 3B+ GPU performance.
+
+# Enable shader system
+video_shader_enable = "true"
+
+# Path to shader file (zfast-crt is recommended for Pi 3B+)
+# On RetroPie, shaders are typically at: /opt/retropie/emulators/retroarch/shader/shaders_glsl/
+# Verify the path exists on your Pi before enabling.
+video_shader = "/opt/retropie/emulators/retroarch/shader/shaders_glsl/crt/zfast-crt.glslp"
+
+# Note: The retropie2600 daemon toggles shader ON/OFF via UDP (SHADER_TOGGLE command).
+# This is separate from keyboard shortcuts. Keyboard shortcut shown below for reference.
+# To enable keyboard shader toggle in RetroArch (optional, in addition to UDP):
+# input_shader_toggle = "f12"
+
+# ============================================================================
+# LR-STELLA CORE OPTIONS — Optional settings for Atari 2600 emulation
+# ============================================================================
+# These can be configured in two ways:
+# 1. Here in the config file (global defaults)
+# 2. In RetroArch Quick Menu → Options (per-game overrides)
+
+# Display filter for lr-stella
+# Choices: "none", "phosphor", "ntsc", "scanlines"
+# stella_filter = "none"
+
+# Crop horizontal overscan (common in Atari 2600 games)
+# Choices: "enabled", "disabled"
+# stella_crop_horiz_overscan = "enabled"
+
+# ============================================================================
+# OTHER HELPFUL SETTINGS (optional)
+# ============================================================================
+
+# Video fullscreen mode (recommended for RetroPie)
+# video_fullscreen = "true"
+
+# Automatic core selection for ROM extensions (set to false to choose manually)
+# core_set_supports_no_rom_loading = "false"
