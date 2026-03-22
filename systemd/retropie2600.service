@@ -1,0 +1,19 @@
+[Unit]
+Description=RetroPie2600 GPIO Switch Daemon
+After=pigpiod.service multi-user.target
+Requires=pigpiod.service
+
+[Service]
+Type=notify
+User=pi
+Group=pi
+SupplementaryGroups=gpio input
+WorkingDirectory=/opt/retropie2600
+ExecStart=/opt/retropie2600/venv/bin/python -m retropie2600.daemon --config /etc/retropie2600/switches.yaml
+WatchdogSec=30
+Restart=on-failure
+RestartSec=5
+EnvironmentFile=-/etc/retropie2600/env
+
+[Install]
+WantedBy=multi-user.target
