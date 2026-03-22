@@ -1,0 +1,22 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.2, pluggy-1.6.0 -- /Users/rkeppner/Code/retropie2600/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/rkeppner/Code/retropie2600
+configfile: pyproject.toml
+plugins: mock-3.15.1
+collecting ... collected 12 items
+
+tests/test_gpio_monitor.py::test_start_registers_callbacks_for_all_pins PASSED [  8%]
+tests/test_gpio_monitor.py::test_start_sets_pull_up_for_all_pins PASSED  [ 16%]
+tests/test_gpio_monitor.py::test_start_sets_glitch_filter PASSED         [ 25%]
+tests/test_gpio_monitor.py::test_toggle_pin_low_emits_event PASSED       [ 33%]
+tests/test_gpio_monitor.py::test_toggle_pin_high_ignored PASSED          [ 41%]
+tests/test_gpio_monitor.py::test_momentary_pin_low_emits_pressed PASSED  [ 50%]
+tests/test_gpio_monitor.py::test_momentary_pin_high_emits_released PASSED [ 58%]
+tests/test_gpio_monitor.py::test_read_all_states_returns_active_pins PASSED [ 66%]
+tests/test_gpio_monitor.py::test_stop_cancels_all_callbacks PASSED       [ 75%]
+tests/test_gpio_monitor.py::test_graceful_degradation_no_pigpio PASSED   [ 83%]
+tests/test_gpio_monitor.py::test_graceful_degradation_pigpiod_not_connected PASSED [ 91%]
+tests/test_gpio_monitor.py::test_read_all_states_returns_empty_in_stub_mode PASSED [100%]
+
+============================== 12 passed in 0.07s ==============================
