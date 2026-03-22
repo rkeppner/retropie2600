@@ -1,0 +1,57 @@
+# RetroPie2600 Switch Configuration
+# All pin numbers are Broadcom (BCM) GPIO numbers
+# See docs/hardware-guide.md for physical wiring
+
+switches:
+  power:
+    pin: 26
+    type: toggle  # software-only shutdown trigger
+    debounce_ms: 500
+
+  tv_type:
+    pin_color: 4    # F3 — Stella Color mode
+    pin_bw: 17      # F4 — Stella B&W mode
+    type: toggle
+    debounce_ms: 20
+
+  game_select:
+    pin: 22         # F1
+    type: momentary
+    debounce_ms: 5
+
+  game_reset:
+    pin: 27         # F2
+    type: momentary
+    debounce_ms: 5
+
+  difficulty_left:
+    pin_a: 23       # F5 — Player 1 Difficulty A (Pro)
+    pin_b: 24       # F6 — Player 1 Difficulty B (Novice)
+    type: toggle
+    debounce_ms: 20
+
+  difficulty_right:
+    pin_a: 25       # F7 — Player 2 Difficulty A (Pro)
+    pin_b: 5        # F8 — Player 2 Difficulty B (Novice)
+    type: toggle
+    debounce_ms: 20
+
+  channel:
+    pin_2: 6        # Channel 2 position — shader ON
+    pin_3: 13       # Channel 3 position — shader OFF
+    type: toggle
+    debounce_ms: 20
+
+power_led:
+  pin: 12           # Red LED in original power jack hole
+
+shader:
+  retroarch_host: "127.0.0.1"
+  retroarch_port: 55355
+
+shutdown:
+  command: "sudo shutdown -h now"
+  delay_ms: 500     # Debounce delay before triggering shutdown
+
+logging:
+  level: INFO
