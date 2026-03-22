@@ -1,0 +1,1 @@
+['game_select', 'game_reset', 'tv_type_color', 'tv_type_bw', 'difficulty_left_a', 'difficulty_left_b', 'difficulty_right_a', 'difficulty_right_b']

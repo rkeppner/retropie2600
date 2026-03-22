@@ -1,0 +1,21 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.2, pluggy-1.6.0 -- /Users/rkeppner/Code/retropie2600/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/rkeppner/Code/retropie2600
+configfile: pyproject.toml
+plugins: mock-3.15.1
+collecting ... collected 11 items
+
+tests/test_input_injector.py::TestStellaKeys::test_stella_keys_has_all_8_mappings PASSED [  9%]
+tests/test_input_injector.py::TestStellaKeys::test_stella_key_values_are_integers PASSED [ 18%]
+tests/test_input_injector.py::TestInputInjectorPressKey::test_press_key_sends_key_down_syn_key_up_syn PASSED [ 27%]
+tests/test_input_injector.py::TestInputInjectorPressKey::test_press_key_unknown_name_does_not_raise PASSED [ 36%]
+tests/test_input_injector.py::TestInputInjectorPressKey::test_press_key_stub_mode_does_nothing PASSED [ 45%]
+tests/test_input_injector.py::TestInputInjectorPressKey::test_all_8_stella_keys_can_be_pressed PASSED [ 54%]
+tests/test_input_injector.py::TestInputInjectorClose::test_close_calls_close_on_uinput PASSED [ 63%]
+tests/test_input_injector.py::TestInputInjectorClose::test_close_idempotent_after_close PASSED [ 72%]
+tests/test_input_injector.py::TestInputInjectorInit::test_stub_mode_when_uinput_unavailable PASSED [ 81%]
+tests/test_input_injector.py::TestInputInjectorInit::test_injected_uinput_not_stub_mode PASSED [ 90%]
+tests/test_input_injector.py::TestInputInjectorInit::test_uinput_creation_failure_enters_stub_mode PASSED [100%]
+
+============================== 11 passed in 0.13s ==============================
