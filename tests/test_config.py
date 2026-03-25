@@ -37,19 +37,19 @@ class TestPinAssignments:
         assert assignments["game_select"] == 22
         assert assignments["game_reset"] == 27
         
-        # Toggle switches with two pins
+        # Toggle switches with positions (single pin, multiple positions)
         assert assignments["tv_type_color"] == 4
-        assert assignments["tv_type_bw"] == 17
+        assert assignments["tv_type_bw"] == 4
         
         # Difficulty switches
         assert assignments["difficulty_left_a"] == 23
-        assert assignments["difficulty_left_b"] == 24
+        assert assignments["difficulty_left_b"] == 23
         assert assignments["difficulty_right_a"] == 25
-        assert assignments["difficulty_right_b"] == 5
+        assert assignments["difficulty_right_b"] == 25
         
         # Channel switch
         assert assignments["channel_2"] == 6
-        assert assignments["channel_3"] == 13
+        assert assignments["channel_3"] == 6
 
 
 class TestDebounce:

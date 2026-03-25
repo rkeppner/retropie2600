@@ -9,9 +9,11 @@ switches:
     debounce_ms: 500
 
   tv_type:
-    pin_color: 4    # F3 — Stella Color mode
-    pin_bw: 17      # F4 — Stella B&W mode
+    pin: 4          # RIOT Pin 21 → BCM 4 (Physical 7); LOW=B&W, HIGH=Color
     type: toggle
+    positions:
+      low: "bw"
+      high: "color"
     debounce_ms: 20
 
   game_select:
@@ -25,21 +27,27 @@ switches:
     debounce_ms: 5
 
   difficulty_left:
-    pin_a: 23       # F5 — Player 1 Difficulty A (Pro)
-    pin_b: 24       # F6 — Player 1 Difficulty B (Novice)
+    pin: 23         # RIOT Pin 17 → BCM 23 (Physical 16); LOW=B/Novice, HIGH=A/Pro
     type: toggle
+    positions:
+      low: "b"
+      high: "a"
     debounce_ms: 20
 
   difficulty_right:
-    pin_a: 25       # F7 — Player 2 Difficulty A (Pro)
-    pin_b: 5        # F8 — Player 2 Difficulty B (Novice)
+    pin: 25         # RIOT Pin 16 → BCM 25 (Physical 22); LOW=B/Novice, HIGH=A/Pro
     type: toggle
+    positions:
+      low: "b"
+      high: "a"
     debounce_ms: 20
 
   channel:
-    pin_2: 6        # Channel 2 position — shader ON
-    pin_3: 13       # Channel 3 position — shader OFF
+    pin: 6          # Direct switch; BCM 6 (Physical 31); LOW=ch3, HIGH=ch2
     type: toggle
+    positions:
+      low: "3"
+      high: "2"
     debounce_ms: 20
 
 power_led:

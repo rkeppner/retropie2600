@@ -48,26 +48,34 @@ class Config:
     def pin_assignments(self) -> Dict[str, Any]:
         """Return flat dict of logical_name → BCM pin number(s).
         
-        Toggle switches with two positions return two entries:
-          tv_type_color → 4, tv_type_bw → 17
+        Toggle switches with positions return position entries:
+          tv_type_color → 4, tv_type_bw → 4 (same pin, different positions)
         Single-pin switches return one entry:
           game_select → 22
+        Legacy dual-pin switches still supported for backward compatibility.
         """
         result = {}
         for name, cfg in self.switches.items():
             if "pin" in cfg:
                 result[name] = cfg["pin"]
-            # tv_type: pin_color, pin_bw
+                # If this is a toggle with positions, create position-based entries
+                if "positions" in cfg and isinstance(cfg["positions"], dict):
+                    pin_num = cfg["pin"]
+                    positions = cfg["positions"]
+                    for pos_key, pos_value in positions.items():
+                        # Map position keys to logical names (e.g., "low"/"high" -> "color"/"bw")
+                        result[f"{name}_{pos_value}"] = pin_num
+            # Legacy support: tv_type with pin_color, pin_bw
             if "pin_color" in cfg:
                 result[f"{name}_color"] = cfg["pin_color"]
             if "pin_bw" in cfg:
                 result[f"{name}_bw"] = cfg["pin_bw"]
-            # difficulty: pin_a, pin_b
+            # Legacy support: difficulty with pin_a, pin_b
             if "pin_a" in cfg:
                 result[f"{name}_a"] = cfg["pin_a"]
             if "pin_b" in cfg:
                 result[f"{name}_b"] = cfg["pin_b"]
-            # channel: pin_2, pin_3
+            # Legacy support: channel with pin_2, pin_3
             if "pin_2" in cfg:
                 result[f"{name}_2"] = cfg["pin_2"]
             if "pin_3" in cfg:
