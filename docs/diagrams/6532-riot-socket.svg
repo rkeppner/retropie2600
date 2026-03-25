@@ -116,10 +116,10 @@
     <circle cx="135" cy="556" r="5" fill="#CCCCCC" />
     <text x="125" y="560" text-anchor="end" fill="#555555">19: PB4</text>
 
-    <!-- Pin 20: VCC -->
-    <line x1="160" y1="580" x2="140" y2="580" stroke="#E53E3E" stroke-width="4" />
-    <circle cx="135" cy="580" r="5" fill="#E53E3E" />
-    <text x="125" y="584" text-anchor="end" font-weight="bold" fill="#E53E3E">20: VCC (+5V) ⚠</text>
+     <!-- Pin 20: VCC -->
+     <line x1="160" y1="580" x2="140" y2="580" stroke="#CCCCCC" stroke-width="4" />
+     <circle cx="135" cy="580" r="5" fill="#CCCCCC" />
+     <text x="125" y="584" text-anchor="end" fill="#555555">20: VCC</text>
 
 
     <!-- RIGHT SIDE (Pins 21-40, Bottom to Top) -->
@@ -234,9 +234,7 @@
     <rect x="120" y="0" width="12" height="12" fill="#4A4A4A" />
     <text x="138" y="10" fill="#000000">GND (Pin 1)</text>
     
-    <!-- VCC Legend -->
-    <rect x="230" y="0" width="12" height="12" fill="#E53E3E" />
-    <text x="248" y="10" fill="#000000">VCC (Pin 20) - DO NOT CONNECT</text>
+
   </g>
 
 </svg>

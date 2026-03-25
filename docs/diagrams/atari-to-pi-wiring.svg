@@ -134,7 +134,7 @@
   <g transform="translate(100, 430)">
     <rect width="1000" height="30" fill="#fff5f5" stroke="#fc8181" stroke-width="1" rx="4"/>
     <text x="500" y="20" class="note-text">
-      &#9888; NOTE: POWER (BCM 26) and CHANNEL (BCM 6) switches wire directly to switch contacts. Remove 24K&#937; pull-up resistors.
+      NOTE: POWER (BCM 26) and CHANNEL (BCM 6) switches wire directly to switch contacts, not through the RIOT socket.
     </text>
   </g>
 
@@ -164,7 +164,6 @@
     <rect x="380" y="0" width="15" height="15" fill="#2D3748" rx="2" />
     <text x="400" y="12" class="legend-text">GND</text>
     
-    <!-- Warning about Pin 20 -->
-    <text x="680" y="12" font-family="Arial" font-size="12" fill="#718096" font-style="italic">Warning: RIOT Pin 20 (VCC) is adjacent to Pin 21</text>
+
   </g>
 </svg>

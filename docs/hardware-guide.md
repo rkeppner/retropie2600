@@ -4,9 +4,6 @@ This guide covers integrating a Raspberry Pi 3B+ into a vintage Atari 2600 CX-26
 
 ## 1. ⚠️ Safety Warnings
 
-⚠️ **CRITICAL: Voltage protection required before connecting to Pi GPIO pins.**
-The original Atari board has 24KΩ pull-up resistors that pull switch lines to +5V when open. 5V exceeds the Pi's 3.3V GPIO maximum input voltage. This will damage the Pi instantly. You MUST complete the 5V Overvoltage Mitigation section before connecting any wires to the Raspberry Pi.
-
 ⚠️ **ESD Precautions:** Handle the Raspberry Pi by the edges. Ground yourself before touching GPIO pins to prevent electrostatic discharge damage.
 
 ⚠️ **Common Ground:** The Pi Ground and the Atari board ground must share a common ground bus. Ensure the GND connections from the switches are tied back to the Pi's GND pins.
@@ -55,29 +52,7 @@ The 6532 RIOT uses a standard DIP-40 numbering scheme:
 
 Each DPDT switch on the Atari board has 6 pins total. However, the PCB traces route these to specific pads on the RIOT socket. By soldering a single wire to the correct RIOT socket pad, you can capture the state of the switch without needing complex wiring directly to the switch terminals.
 
-## 4. ⚠️ 5V Overvoltage Mitigation — MUST DO BEFORE WIRING
-
-> ⚠️ **CRITICAL: Voltage protection required before connecting to Pi GPIO pins.**
-
-The Atari PCB contains 24KΩ pull-up resistors (typically located near the RIOT chip) that pull the switch lines to +5V when the switches are open. Since the Raspberry Pi GPIO pins are not 5V tolerant, connecting them directly while these resistors are present will destroy your Pi.
-
-### Recommended Approach: Resistor Removal
-The cleanest method is to locate and desolder the 24KΩ pull-up resistors on the Atari PCB. Once these resistors are removed, the signal lines will no longer be pulled to 5V. Instead, we use the Raspberry Pi's internal ~50KΩ pull-up resistors, which hold the lines safely at 3.3V.
-
-### Alternative 1: Voltage Divider
-If you prefer not to modify the Atari PCB traces, you can use a voltage divider on each signal line. Using two 10KΩ resistors (one in series with the signal, one from the Pi pin to GND) will drop the 5V signal to approximately 2.5V, which is safe for the Pi.
-
-### Alternative 2: Logic Level Shifter
-A dedicated logic level shifter IC, such as the 74AHCT125, can be used to safely interface the 5V Atari signals with the 3.3V Pi GPIO pins.
-
-### Verification
-Before connecting any wires to the Pi:
-1. Power on the Atari board (if still using its power circuit) or verify with a multimeter.
-2. Measure the voltage on each RIOT socket pin.
-3. It should read 3.3V (after mitigation and with the Pi powered) or 0V (if completely disconnected).
-4. **If you see 5V, STOP.** Do not connect the Pi.
-
-## 5. IC Socket Pin Reference
+## 4. IC Socket Pin Reference
 
 The following schematic reference provides the context for the Atari 2600A wiring.
 
@@ -98,9 +73,7 @@ This table defines the connection from the Atari RIOT socket to the Raspberry Pi
 
 **Note:** The POWER and CHANNEL switches are located on separate parts of the board and do not route through the RIOT IC socket.
 
-⚠️ **WARNING:** Pin 20 (VCC, +5V) is located at the bottom-left of the socket. Pin 21 (B/W-COLOR) is at the bottom-right. Be extremely careful when soldering near Pin 21 to avoid an accidental bridge to Pin 20.
-
-## 6. GPIO Pin Assignment Table
+## 5. GPIO Pin Assignment Table
 
 This table summarizes the final GPIO assignments used by the `retropie2600` daemon. These pins match the default `config/switches.example.yaml`.
 
@@ -117,7 +90,7 @@ This table summarizes the final GPIO assignments used by the `retropie2600` daem
 
 ![Raspberry Pi GPIO Header Pin Assignments](diagrams/rpi-gpio-header.svg)
 
-## 7. IC Socket Wiring Approach
+## 6. IC Socket Wiring Approach
 
 For this project, we use a single-wire approach for all console switches. The modern `retropie2600` daemon supports single-pin toggle detection, which simplifies wiring significantly compared to older dual-wire methods.
 
@@ -140,7 +113,7 @@ tv_type:
 ### Pull-Up Resistors
 All switch inputs use active-low logic. The Raspberry Pi's internal pull-up resistors (PUD_UP) are configured by the `pigpio` daemon. When a switch is closed, it pulls the signal line to Ground (LOW), triggering the event.
 
-## 8. Step-by-Step Wiring Instructions
+## 7. Step-by-Step Wiring Instructions
 
 The following diagram illustrates the full connection path from the Atari board to the Raspberry Pi.
 
@@ -161,7 +134,6 @@ The following diagram illustrates the full connection path from the Atari board 
 - **Source:** RIOT socket Pin 21. This is the bottom-right corner pin.
 - **Destination:** Raspberry Pi BCM 4 (Physical Pin 7).
 - **Logic:** LOW = B&W (Stella F4), HIGH = Color (Stella F3).
-- ⚠️ **CAUTION:** Pin 20 is VCC (+5V) and is located at the bottom-left. Pin 21 is at the bottom-right. Do NOT connect or bridge to Pin 20.
 
 ### Left Difficulty (Toggle, single-pin)
 - **Source:** RIOT socket Pin 17. This is the 6th pin up from the bottom-right.
@@ -183,7 +155,7 @@ The following diagram illustrates the full connection path from the Atari board 
 - **Wiring:** Solder a wire directly from the switch contact to Raspberry Pi BCM 26 (Physical Pin 37).
 - **Function:** This pin is handled by the `gpio-shutdown` dtoverlay in the system configuration, allowing for safe shutdowns and hardware-level power-on.
 
-## 9. Power LED Installation
+## 8. Power LED Installation
 
 The original Atari 2600 power jack hole is repurposed for a red status LED.
 
@@ -191,7 +163,7 @@ The original Atari 2600 power jack hole is repurposed for a red status LED.
 - **Cathode (-):** Connect to any Ground pin (e.g., **Pin 30**).
 - **Calculation:** (3.3V - 2.0V) / 0.02A = 65Ω minimum; 330Ω provides a safe, visible brightness.
 
-## 10. Fan Installation
+## 9. Fan Installation
 
 Active cooling is necessary for the Pi 3B+ when housed inside the plastic Atari shell.
 
@@ -200,7 +172,7 @@ Active cooling is necessary for the Pi 3B+ when housed inside the plastic Atari 
 - **Mounting:** Attach heatsinks to the Pi CPU and GPU. Mount the 40mm fan near the top vents of the Atari case to ensure proper exhaust airflow.
 - **Optional Control:** To enable temperature-controlled activation, use `dtoverlay=gpio-fan` in `/boot/config.txt`.
 
-## 11. Port Cutout Guide
+## 10. Port Cutout Guide
 
 The Raspberry Pi should be oriented so the ports face the rear of the Atari case.
 
@@ -209,7 +181,7 @@ The Raspberry Pi should be oriented so the ports face the rear of the Atari case
 3. **USB/Ethernet:** Use panel-mount extensions to bring the 2600-daptor connections and network port to the rear panel.
 4. **Safety:** Use a Dremel with a plastic-cutting wheel. Wear eye protection.
 
-## 12. /boot/config.txt Configuration
+## 11. /boot/config.txt Configuration
 
 Add the following lines to your `/boot/config.txt` to enable system-level hardware features:
 
@@ -224,7 +196,7 @@ dtoverlay=gpio-shutdown,gpio_pin=26
 
 **Note:** `gpio-shutdown` allows the power switch to trigger a clean shutdown and also allows the Pi to boot from a halted state by flipping the switch.
 
-## 13. Testing Your Wiring
+## 12. Testing Your Wiring
 
 Once wired, you can verify the hardware integration using the system logs.
 
@@ -249,18 +221,17 @@ retropie2600[1234]: Switch event: difficulty_left → a
 
 4. If the LED does not light up, check the orientation (polarity) and the resistor connection.
 
-## 14. Troubleshooting
+## 13. Troubleshooting
 
 - **"Pin reads HIGH all the time":** Check the Ground connection from RIOT Pin 1 to the Pi Ground. If the circuit isn't completed, the pin will never be pulled LOW.
-- **"Pin reads LOW all the time":** This indicates a floating pin. Verify that the 5V mitigation (resistor removal) was successful and that the Pi's internal pull-up is enabled in the software.
+- **"Pin reads LOW all the time":** This indicates a floating pin. Verify that the Pi's internal pull-up is enabled in the software configuration.
 - **"Toggle shows same position for both switch positions":** You may have wired to the wrong RIOT socket pad. Use a multimeter in continuity mode to trace the signal from the switch to the socket pad.
-- **"5V detected on GPIO pin":** **STOP IMMEDIATELY.** Do not power on the Pi. This means the 5V pull-up resistors have not been removed or bypassed. Re-read Section 4.
 - **"No events in daemon log":** 
   - Check the daemon status: `systemctl status retropie2600`.
   - Verify that `pigpiod` is running.
   - Confirm that the pin numbers in your wiring match `config/switches.example.yaml`.
 
-## 15. References
+## 14. References
 
 - **Atari Field Service Manual (FD100133):** Detailed schematics and PCB layouts for all Atari 2600 revisions.
 - **DJSures Atari-2600-VCS-USB project:** https://github.com/DJSures/Atari-2600-VCS-USB-Joystick-Console-Arduino

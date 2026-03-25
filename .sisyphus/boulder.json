@@ -1,9 +1,11 @@
 {
-  "active_plan": "/Users/rkeppner/Code/retropie2600/.sisyphus/plans/retropie2600-phase1.md",
-  "started_at": "2026-03-22T00:48:15.405Z",
+  "active_plan": "/Users/rkeppner/Code/retropie2600/.sisyphus/plans/remove-overvoltage-section.md",
+  "started_at": "2026-03-25T02:13:52.867Z",
   "session_ids": [
-    "ses_2ee535174ffeGWmw5BosvOReyo"
+    "ses_2ee535174ffeGWmw5BosvOReyo",
+    "ses_2dd39510effeq7uU6A1dBH1HHl",
+    "ses_2dd34f593ffe6fygHhhnFU3Z7y"
   ],
-  "plan_name": "retropie2600-phase1",
+  "plan_name": "remove-overvoltage-section",
   "agent": "atlas"
 }
