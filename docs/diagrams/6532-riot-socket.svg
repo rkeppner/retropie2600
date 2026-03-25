@@ -1,0 +1,242 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 680" role="img" aria-labelledby="riot-title riot-desc">
+  <title id="riot-title">6532 RIOT 40-Pin DIP Socket Pinout</title>
+  <desc id="riot-desc">Pinout diagram of the MOS 6532 RIOT chip showing which socket pins connect to Atari 2600 console switches</desc>
+  
+  <!-- Background (optional for visibility in dark mode viewers) -->
+  <rect x="0" y="0" width="520" height="680" fill="#ffffff" />
+
+  <!-- Chip Body -->
+  <rect x="160" y="100" width="200" height="500" rx="10" ry="10" fill="#2D3748" />
+  
+  <!-- Notch -->
+  <path d="M 240 100 A 20 20 0 0 0 280 100" fill="#1A202C" />
+  
+  <!-- Pin 1 Indicator -->
+  <circle cx="180" cy="130" r="5" fill="#CCCCCC" />
+
+  <!-- Chip Labels -->
+  <text x="260" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#E2E8F0">6532 RIOT (A202)</text>
+  <text x="260" y="350" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#A0AEC0">MOS Technology / Rockwell R6532</text>
+
+  <!-- Pins Group -->
+  <g font-family="Arial, sans-serif" font-size="12">
+    <!-- LEFT SIDE (Pins 1-20) -->
+    <!-- Pin 1: GND -->
+    <line x1="160" y1="124" x2="140" y2="124" stroke="#4A4A4A" stroke-width="4" />
+    <circle cx="135" cy="124" r="5" fill="#4A4A4A" />
+    <text x="125" y="128" text-anchor="end" font-weight="bold" fill="#000000">1: GND</text>
+
+    <!-- Pin 2: A5 -->
+    <line x1="160" y1="148" x2="140" y2="148" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="135" cy="148" r="5" fill="#CCCCCC" />
+    <text x="125" y="152" text-anchor="end" fill="#555555">2: A5</text>
+
+    <!-- Pin 3: A4 -->
+    <line x1="160" y1="172" x2="140" y2="172" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="135" cy="172" r="5" fill="#CCCCCC" />
+    <text x="125" y="176" text-anchor="end" fill="#555555">3: A4</text>
+
+    <!-- Pin 4: A3 -->
+    <line x1="160" y1="196" x2="140" y2="196" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="135" cy="196" r="5" fill="#CCCCCC" />
+    <text x="125" y="200" text-anchor="end" fill="#555555">4: A3</text>
+
+    <!-- Pin 5: A2 -->
+    <line x1="160" y1="220" x2="140" y2="220" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="135" cy="220" r="5" fill="#CCCCCC" />
+    <text x="125" y="224" text-anchor="end" fill="#555555">5: A2</text>
+
+    <!-- Pin 6: A1 -->
+    <line x1="160" y1="244" x2="140" y2="244" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="135" cy="244" r="5" fill="#CCCCCC" />
+    <text x="125" y="248" text-anchor="end" fill="#555555">6: A1</text>
+
+    <!-- Pin 7: A0 -->
+    <line x1="160" y1="268" x2="140" y2="268" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="135" cy="268" r="5" fill="#CCCCCC" />
+    <text x="125" y="272" text-anchor="end" fill="#555555">7: A0</text>
+
+    <!-- Pin 8: PA0 -->
+    <line x1="160" y1="292" x2="140" y2="292" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="135" cy="292" r="5" fill="#CCCCCC" />
+    <text x="125" y="296" text-anchor="end" fill="#555555">8: PA0</text>
+
+    <!-- Pin 9: PA1 -->
+    <line x1="160" y1="316" x2="140" y2="316" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="135" cy="316" r="5" fill="#CCCCCC" />
+    <text x="125" y="320" text-anchor="end" fill="#555555">9: PA1</text>
+
+    <!-- Pin 10: PA2 -->
+    <line x1="160" y1="340" x2="140" y2="340" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="135" cy="340" r="5" fill="#CCCCCC" />
+    <text x="125" y="344" text-anchor="end" fill="#555555">10: PA2</text>
+
+    <!-- Pin 11: PA3 -->
+    <line x1="160" y1="364" x2="140" y2="364" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="135" cy="364" r="5" fill="#CCCCCC" />
+    <text x="125" y="368" text-anchor="end" fill="#555555">11: PA3</text>
+
+    <!-- Pin 12: PA4 -->
+    <line x1="160" y1="388" x2="140" y2="388" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="135" cy="388" r="5" fill="#CCCCCC" />
+    <text x="125" y="392" text-anchor="end" fill="#555555">12: PA4</text>
+
+    <!-- Pin 13: PA5 -->
+    <line x1="160" y1="412" x2="140" y2="412" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="135" cy="412" r="5" fill="#CCCCCC" />
+    <text x="125" y="416" text-anchor="end" fill="#555555">13: PA5</text>
+
+    <!-- Pin 14: PA6 -->
+    <line x1="160" y1="436" x2="140" y2="436" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="135" cy="436" r="5" fill="#CCCCCC" />
+    <text x="125" y="440" text-anchor="end" fill="#555555">14: PA6</text>
+
+    <!-- Pin 15: PA7 -->
+    <line x1="160" y1="460" x2="140" y2="460" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="135" cy="460" r="5" fill="#CCCCCC" />
+    <text x="125" y="464" text-anchor="end" fill="#555555">15: PA7</text>
+
+    <!-- Pin 16: PB7 (RIGHT DIFFICULTY) -->
+    <line x1="160" y1="484" x2="140" y2="484" stroke="#F4B942" stroke-width="4" />
+    <circle cx="135" cy="484" r="5" fill="#F4B942" />
+    <text x="125" y="488" text-anchor="end" font-weight="bold" fill="#000000">16: PB7 (RIGHT DIFF)</text>
+
+    <!-- Pin 17: PB6 (LEFT DIFFICULTY) -->
+    <line x1="160" y1="508" x2="140" y2="508" stroke="#F4B942" stroke-width="4" />
+    <circle cx="135" cy="508" r="5" fill="#F4B942" />
+    <text x="125" y="512" text-anchor="end" font-weight="bold" fill="#000000">17: PB6 (LEFT DIFF)</text>
+
+    <!-- Pin 18: PB5 -->
+    <line x1="160" y1="532" x2="140" y2="532" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="135" cy="532" r="5" fill="#CCCCCC" />
+    <text x="125" y="536" text-anchor="end" fill="#555555">18: PB5</text>
+
+    <!-- Pin 19: PB4 -->
+    <line x1="160" y1="556" x2="140" y2="556" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="135" cy="556" r="5" fill="#CCCCCC" />
+    <text x="125" y="560" text-anchor="end" fill="#555555">19: PB4</text>
+
+    <!-- Pin 20: VCC -->
+    <line x1="160" y1="580" x2="140" y2="580" stroke="#E53E3E" stroke-width="4" />
+    <circle cx="135" cy="580" r="5" fill="#E53E3E" />
+    <text x="125" y="584" text-anchor="end" font-weight="bold" fill="#E53E3E">20: VCC (+5V) ⚠</text>
+
+
+    <!-- RIGHT SIDE (Pins 21-40, Bottom to Top) -->
+    <!-- Pin 21: PB3 (B/W COLOR) -->
+    <line x1="360" y1="580" x2="380" y2="580" stroke="#F4B942" stroke-width="4" />
+    <circle cx="385" cy="580" r="5" fill="#F4B942" />
+    <text x="395" y="584" text-anchor="start" font-weight="bold" fill="#000000">21: PB3 (B/W COLOR)</text>
+
+    <!-- Pin 22: PB2 -->
+    <line x1="360" y1="556" x2="380" y2="556" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="385" cy="556" r="5" fill="#CCCCCC" />
+    <text x="395" y="560" text-anchor="start" fill="#555555">22: PB2</text>
+
+    <!-- Pin 23: PB1 (GAME SELECT) -->
+    <line x1="360" y1="532" x2="380" y2="532" stroke="#F4B942" stroke-width="4" />
+    <circle cx="385" cy="532" r="5" fill="#F4B942" />
+    <text x="395" y="536" text-anchor="start" font-weight="bold" fill="#000000">23: PB1 (SELECT)</text>
+
+    <!-- Pin 24: PB0 (GAME RESET) -->
+    <line x1="360" y1="508" x2="380" y2="508" stroke="#F4B942" stroke-width="4" />
+    <circle cx="385" cy="508" r="5" fill="#F4B942" />
+    <text x="395" y="512" text-anchor="start" font-weight="bold" fill="#000000">24: PB0 (RESET)</text>
+
+    <!-- Pin 25: /IRQ -->
+    <line x1="360" y1="484" x2="380" y2="484" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="385" cy="484" r="5" fill="#CCCCCC" />
+    <text x="395" y="488" text-anchor="start" fill="#555555">25: /IRQ</text>
+
+    <!-- Pin 26: D7 -->
+    <line x1="360" y1="460" x2="380" y2="460" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="385" cy="460" r="5" fill="#CCCCCC" />
+    <text x="395" y="464" text-anchor="start" fill="#555555">26: D7</text>
+
+    <!-- Pin 27: D6 -->
+    <line x1="360" y1="436" x2="380" y2="436" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="385" cy="436" r="5" fill="#CCCCCC" />
+    <text x="395" y="440" text-anchor="start" fill="#555555">27: D6</text>
+
+    <!-- Pin 28: D5 -->
+    <line x1="360" y1="412" x2="380" y2="412" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="385" cy="412" r="5" fill="#CCCCCC" />
+    <text x="395" y="416" text-anchor="start" fill="#555555">28: D5</text>
+
+    <!-- Pin 29: D4 -->
+    <line x1="360" y1="388" x2="380" y2="388" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="385" cy="388" r="5" fill="#CCCCCC" />
+    <text x="395" y="392" text-anchor="start" fill="#555555">29: D4</text>
+
+    <!-- Pin 30: D3 -->
+    <line x1="360" y1="364" x2="380" y2="364" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="385" cy="364" r="5" fill="#CCCCCC" />
+    <text x="395" y="368" text-anchor="start" fill="#555555">30: D3</text>
+
+    <!-- Pin 31: D2 -->
+    <line x1="360" y1="340" x2="380" y2="340" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="385" cy="340" r="5" fill="#CCCCCC" />
+    <text x="395" y="344" text-anchor="start" fill="#555555">31: D2</text>
+
+    <!-- Pin 32: D1 -->
+    <line x1="360" y1="316" x2="380" y2="316" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="385" cy="316" r="5" fill="#CCCCCC" />
+    <text x="395" y="320" text-anchor="start" fill="#555555">32: D1</text>
+
+    <!-- Pin 33: D0 -->
+    <line x1="360" y1="292" x2="380" y2="292" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="385" cy="292" r="5" fill="#CCCCCC" />
+    <text x="395" y="296" text-anchor="start" fill="#555555">33: D0</text>
+
+    <!-- Pin 34: /RESET -->
+    <line x1="360" y1="268" x2="380" y2="268" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="385" cy="268" r="5" fill="#CCCCCC" />
+    <text x="395" y="272" text-anchor="start" fill="#555555">34: /RESET</text>
+
+    <!-- Pin 35: R/W -->
+    <line x1="360" y1="244" x2="380" y2="244" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="385" cy="244" r="5" fill="#CCCCCC" />
+    <text x="395" y="248" text-anchor="start" fill="#555555">35: R/W</text>
+
+    <!-- Pin 36: /RS -->
+    <line x1="360" y1="220" x2="380" y2="220" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="385" cy="220" r="5" fill="#CCCCCC" />
+    <text x="395" y="224" text-anchor="start" fill="#555555">36: /RS</text>
+
+    <!-- Pin 37: /CE -->
+    <line x1="360" y1="196" x2="380" y2="196" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="385" cy="196" r="5" fill="#CCCCCC" />
+    <text x="395" y="200" text-anchor="start" fill="#555555">37: /CE</text>
+
+    <!-- Pin 38: CE -->
+    <line x1="360" y1="172" x2="380" y2="172" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="385" cy="172" r="5" fill="#CCCCCC" />
+    <text x="395" y="176" text-anchor="start" fill="#555555">38: CE</text>
+
+    <!-- Pin 39: CLK -->
+    <line x1="360" y1="148" x2="380" y2="148" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="385" cy="148" r="5" fill="#CCCCCC" />
+    <text x="395" y="152" text-anchor="start" fill="#555555">39: CLK</text>
+
+    <!-- Pin 40: A6 -->
+    <line x1="360" y1="124" x2="380" y2="124" stroke="#CCCCCC" stroke-width="4" />
+    <circle cx="385" cy="124" r="5" fill="#CCCCCC" />
+    <text x="395" y="128" text-anchor="start" fill="#555555">40: A6</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(10, 630)" font-family="Arial, sans-serif" font-size="12">
+    <!-- Switch Legend -->
+    <rect x="0" y="0" width="12" height="12" fill="#F4B942" />
+    <text x="18" y="10" fill="#000000">Switch Signals</text>
+    
+    <!-- GND Legend -->
+    <rect x="120" y="0" width="12" height="12" fill="#4A4A4A" />
+    <text x="138" y="10" fill="#000000">GND (Pin 1)</text>
+    
+    <!-- VCC Legend -->
+    <rect x="230" y="0" width="12" height="12" fill="#E53E3E" />
+    <text x="248" y="10" fill="#000000">VCC (Pin 20) - DO NOT CONNECT</text>
+  </g>
+
+</svg>
