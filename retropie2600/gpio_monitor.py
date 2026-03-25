@@ -57,15 +57,26 @@ class GPIOMonitor:
             switch_type = SwitchType(switch_cfg.get("type", "toggle"))
             debounce_us = switch_cfg.get("debounce_ms", 20) * 1000
             pins_for_switch = self._get_pins_for_switch(switch_name, switch_cfg)
+            single_pin_positions = self._get_single_pin_toggle_positions(
+                switch_name,
+                switch_cfg,
+                switch_type,
+            )
 
             for pin, position_name in pins_for_switch:
                 self._pi.set_mode(pin, pigpio.INPUT)
                 self._pi.set_pull_up_down(pin, pigpio.PUD_UP)
                 self._pi.set_glitch_filter(pin, debounce_us)
+                positions = single_pin_positions if position_name == "single_pin_toggle" else None
                 handle = self._pi.callback(
                     pin,
                     pigpio.EITHER_EDGE,
-                    self._make_edge_handler(switch_name, position_name, switch_type),
+                    self._make_edge_handler(
+                        switch_name,
+                        position_name,
+                        switch_type,
+                        positions=positions,
+                    ),
                 )
                 self._callback_handles.append(handle)
 
@@ -93,6 +104,18 @@ class GPIOMonitor:
             if switch_name == "power":
                 continue
 
+            single_pin_positions = self._get_single_pin_toggle_positions(
+                switch_name,
+                switch_cfg,
+                switch_type,
+            )
+            if single_pin_positions is not None:
+                level = self._pi.read(switch_cfg["pin"])
+                states[switch_name] = (
+                    single_pin_positions["low"] if level == 0 else single_pin_positions["high"]
+                )
+                continue
+
             pins = self._get_pins_for_switch(switch_name, switch_cfg)
             for pin, position_name in pins:
                 level = self._pi.read(pin)
@@ -102,8 +125,36 @@ class GPIOMonitor:
 
         return states
 
+    def _get_single_pin_toggle_positions(
+        self,
+        switch_name: str,
+        switch_cfg: dict,
+        switch_type: SwitchType,
+    ) -> Optional[Dict[str, str]]:
+        if switch_type != SwitchType.TOGGLE or switch_name == "power":
+            return None
+        if "pin" not in switch_cfg or "positions" not in switch_cfg:
+            return None
+
+        positions = switch_cfg["positions"]
+        if not isinstance(positions, dict):
+            return None
+        if "low" not in positions or "high" not in positions:
+            return None
+
+        return {"low": positions["low"], "high": positions["high"]}
+
     def _get_pins_for_switch(self, switch_name: str, switch_cfg: dict) -> List[Tuple[int, str]]:
         pins: List[Tuple[int, str]] = []
+        switch_type = SwitchType(switch_cfg.get("type", "toggle"))
+        single_pin_positions = self._get_single_pin_toggle_positions(
+            switch_name,
+            switch_cfg,
+            switch_type,
+        )
+        if single_pin_positions is not None:
+            return [(switch_cfg["pin"], "single_pin_toggle")]
+
         if "pin" in switch_cfg:
             if switch_name == "power":
                 pins.append((switch_cfg["pin"], "off"))
@@ -128,6 +179,7 @@ class GPIOMonitor:
         switch_name: str,
         position_name: str,
         switch_type: SwitchType,
+        positions: Optional[Dict[str, str]] = None,
     ) -> Callable[[int, int, int], None]:
         def _on_edge(gpio: int, level: int, tick: int) -> None:
             del gpio, tick
@@ -135,9 +187,12 @@ class GPIOMonitor:
             if switch_type == SwitchType.MOMENTARY:
                 actual_position = "pressed" if level == 0 else "released"
             else:
-                if level != 0:
-                    return
-                actual_position = position_name
+                if positions is not None:
+                    actual_position = positions["low"] if level == 0 else positions["high"]
+                else:
+                    if level != 0:
+                        return
+                    actual_position = position_name
 
             event = SwitchEvent(
                 switch_name=switch_name,

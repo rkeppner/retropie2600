@@ -31,6 +31,30 @@ def _registered_handler_for_pin(mock_pigpio, pin):
     raise AssertionError(f"No callback registered for pin {pin}")
 
 
+def _single_pin_toggle_config(tmp_path):
+    config_content = """
+switches:
+  power:
+    pin: 26
+    type: toggle
+    debounce_ms: 500
+  tv_type:
+    pin: 4
+    type: toggle
+    positions:
+      low: bw
+      high: color
+    debounce_ms: 20
+  game_select:
+    pin: 22
+    type: momentary
+    debounce_ms: 5
+"""
+    config_file = tmp_path / "single_pin_switches.yaml"
+    config_file.write_text(config_content)
+    return str(config_file)
+
+
 def test_start_registers_callbacks_for_all_pins(tmp_config, mock_pigpio, monkeypatch):
     monitor, pigpio_module = _build_monitor(tmp_config, mock_pigpio, monkeypatch)
 
@@ -181,3 +205,61 @@ def test_read_all_states_returns_empty_in_stub_mode(tmp_config, mock_pigpio, mon
     monitor._stub_mode = True
 
     assert monitor.read_all_states() == {}
+
+
+def test_single_pin_toggle_fires_on_low(tmp_path, mock_pigpio, monkeypatch):
+    callback = MagicMock()
+    config_path = _single_pin_toggle_config(tmp_path)
+    monitor, _ = _build_monitor(config_path, mock_pigpio, monkeypatch, callback=callback)
+    monitor.start()
+
+    handler = _registered_handler_for_pin(mock_pigpio, 4)
+    handler(4, 0, 123)
+
+    callback.assert_called_once()
+    event = callback.call_args.args[0]
+    assert isinstance(event, SwitchEvent)
+    assert event.switch_name == "tv_type"
+    assert event.position == "bw"
+
+
+def test_single_pin_toggle_fires_on_high(tmp_path, mock_pigpio, monkeypatch):
+    callback = MagicMock()
+    config_path = _single_pin_toggle_config(tmp_path)
+    monitor, _ = _build_monitor(config_path, mock_pigpio, monkeypatch, callback=callback)
+    monitor.start()
+
+    handler = _registered_handler_for_pin(mock_pigpio, 4)
+    handler(4, 1, 123)
+
+    callback.assert_called_once()
+    event = callback.call_args.args[0]
+    assert isinstance(event, SwitchEvent)
+    assert event.switch_name == "tv_type"
+    assert event.position == "color"
+
+
+def test_read_all_states_single_pin_toggle_returns_correct_position(tmp_path, mock_pigpio, monkeypatch):
+    config_path = _single_pin_toggle_config(tmp_path)
+    monitor, _ = _build_monitor(config_path, mock_pigpio, monkeypatch)
+    monitor.start()
+
+    mock_pigpio.read.return_value = 0
+    assert monitor.read_all_states() == {"tv_type": "bw"}
+
+    mock_pigpio.read.return_value = 1
+    assert monitor.read_all_states() == {"tv_type": "color"}
+
+
+def test_dual_pin_toggle_backward_compat_still_works(tmp_config, mock_pigpio, monkeypatch):
+    monitor, _ = _build_monitor(tmp_config, mock_pigpio, monkeypatch)
+
+    def read_side_effect(pin):
+        if pin == 17:
+            return 0
+        return 1
+
+    mock_pigpio.read.side_effect = read_side_effect
+    monitor.start()
+
+    assert monitor.read_all_states() == {"tv_type": "bw"}
