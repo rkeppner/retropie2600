@@ -9,7 +9,7 @@ switches:
     positions:
       low: "on"       # LOW = switch On (top↔middle bridged to GND)
       high: "off"     # HIGH = switch Off (top disconnected, pull-up)
-    debounce_ms: 500
+    debounce_ms: 200
 
   tv_type:
     pin: 4          # RIOT Pin 21 → BCM 4 (Physical 7); LOW=B&W, HIGH=Color

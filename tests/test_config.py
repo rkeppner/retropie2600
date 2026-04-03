@@ -60,7 +60,7 @@ class TestDebounce:
         config = Config.from_file("config/switches.example.yaml")
         debounce = config.debounce_ms
         
-        assert debounce["power"] == 500
+        assert debounce["power"] == 200
         assert debounce["tv_type"] == 20
         assert debounce["game_select"] == 5
         assert debounce["game_reset"] == 5

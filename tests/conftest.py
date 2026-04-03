@@ -107,7 +107,7 @@ switches:
   power:
     pin: 26
     type: toggle
-    debounce_ms: 500
+    debounce_ms: 200
   tv_type:
     pin_color: 4
     pin_bw: 17

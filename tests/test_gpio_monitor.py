@@ -40,7 +40,7 @@ switches:
     positions:
       low: "on"
       high: "off"
-    debounce_ms: 500
+    debounce_ms: 200
   tv_type:
     pin: 4
     type: toggle
@@ -85,7 +85,7 @@ def test_start_sets_glitch_filter(tmp_config, mock_pigpio, monkeypatch):
     monitor.start()
 
     expected_calls = [
-        call(26, 500000),
+        call(26, 200000),
         call(4, 20000),
         call(17, 20000),
         call(22, 5000),

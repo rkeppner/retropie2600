@@ -12,6 +12,9 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+# pigpio set_glitch_filter maximum: 300000 µs (300 ms)
+_MAX_GLITCH_FILTER_US = 300_000
+
 
 class SwitchType(Enum):
     MOMENTARY = "momentary"
@@ -55,7 +58,7 @@ class GPIOMonitor:
         self._stub_mode = False
         for switch_name, switch_cfg in self._config.switches.items():
             switch_type = SwitchType(switch_cfg.get("type", "toggle"))
-            debounce_us = switch_cfg.get("debounce_ms", 20) * 1000
+            debounce_us = min(switch_cfg.get("debounce_ms", 20) * 1000, _MAX_GLITCH_FILTER_US)
             pins_for_switch = self._get_pins_for_switch(switch_name, switch_cfg)
             single_pin_positions = self._get_single_pin_toggle_positions(
                 switch_name,
