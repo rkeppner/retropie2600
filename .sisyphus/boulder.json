@@ -4,8 +4,12 @@
   "session_ids": [
     "ses_2ee535174ffeGWmw5BosvOReyo",
     "ses_2dd39510effeq7uU6A1dBH1HHl",
-    "ses_2dd34f593ffe6fygHhhnFU3Z7y"
+    "ses_2dd34f593ffe6fygHhhnFU3Z7y",
+    "ses_2b0ab22bfffe2J5tPg4Jx4TnNG",
+    "ses_2b0ab0848ffeE7V03H63Xa55ee",
+    "ses_2b09b87dbffe2RckDobWpZcINr"
   ],
   "plan_name": "remove-overvoltage-section",
-  "agent": "atlas"
+  "agent": "atlas",
+  "task_sessions": {}
 }

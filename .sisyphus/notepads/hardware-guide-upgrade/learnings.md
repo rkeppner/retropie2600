@@ -53,3 +53,15 @@ BCM 5, 13, 17, 24 — show as muted/unused in GPIO SVG, no labels.
 
 ## [2026-03-24] Task 5: Single-pin toggle implementation
 Implemented single-pin toggle support in GPIOMonitor by detecting toggle configs with pin+positions (excluding power), routing edge callbacks through positions low/high mapping, and reading startup state from the same mapping in read_all_states(). Preserved dual-pin toggle and momentary behavior by keeping legacy low-only toggle callback path when positions are absent, plus explicit backward-compat tests. Verified config.py required no change because validation only checks integer values for keys containing "pin", so positions dict is ignored as intended.
+
+## [2026-03-24] Task 6: Config migration to single-pin toggle schema
+Migrated `config/switches.example.yaml` from dual-pin format (pin_color/pin_bw, pin_a/pin_b, pin_2/pin_3) to single-pin with positions schema. Updated 4 toggle switches:
+- `tv_type`: pin_color:4 + pin_bw:17 → pin:4 with positions {low:"bw", high:"color"}
+- `difficulty_left`: pin_a:23 + pin_b:24 → pin:23 with positions {low:"b", high:"a"}
+- `difficulty_right`: pin_a:25 + pin_b:5 → pin:25 with positions {low:"b", high:"a"}
+- `channel`: pin_2:6 + pin_3:13 → pin:6 with positions {low:"3", high:"2"}
+
+Updated `config.py.pin_assignments` property to generate backward-compat position keys (e.g., tv_type_color→4, tv_type_bw→4 both map to pin 4). Updated test to expect single-pin behavior (all position values map to same BCM pin). All 66 tests pass, YAML validates, Config.from_file() succeeds, no dual-pin keys remaining in config file.
+
+## [2026-03-24] Task 4: Hardware guide rewrite
+Rewrote `docs/hardware-guide.md` to ~350+ lines (34 table rows) incorporating comprehensive IC socket wiring instructions. Moved safety warnings to top with a prominent 5V overvoltage callout. Added sections for Understanding the Atari Board (RIOT pinout), 5V mitigation (desoldering resistors), IC socket mapping table, and troubleshooting. Integrated 3 SVG diagrams and the existing Atari schematic. Preserved and updated BOM, LED, fan, and port cutout sections to align with single-pin toggle config. All 8 QA checks passed, verifying pin consistency, section order, and reference integrity.
