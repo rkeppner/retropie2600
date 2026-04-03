@@ -25,6 +25,21 @@ This guide covers the installation of the retropie2600 daemon on a Raspberry Pi 
 ### Update System
 Connect via SSH (`ssh pi@retropie.local`) and update the system:
 
+#### Fix Buster APT Repository
+
+The RetroPie Buster image ships with an APT source (`raspbian.raspberrypi.org`) that no longer exists. You must update `/etc/apt/sources.list` before running `apt update`. The other source file (`/etc/apt/sources.list.d/raspi.list`) still works and should be left unchanged.
+
+Edit `/etc/apt/sources.list`:
+```bash
+sudo nano /etc/apt/sources.list
+```
+Replace the existing line with:
+```text
+deb https://legacy.raspbian.org/raspbian/ buster main contrib non-free rpi
+```
+
+#### Run System Update
+
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
@@ -65,8 +80,16 @@ sudo chown -R pi:pi /opt/retropie2600
 # Create Python venv
 python3 -m venv /opt/retropie2600/venv
 
-# Install the package in editable mode
-/opt/retropie2600/venv/bin/pip install -e /opt/retropie2600/
+# Verify venv pip/python (avoid accidentally using system pip)
+/opt/retropie2600/venv/bin/python -V
+/opt/retropie2600/venv/bin/python -m pip --version
+
+# Upgrade packaging toolchain (Buster often starts with pip ~18.x)
+# Pin ranges keep compatibility with older Python versions seen on RetroPie/Buster.
+/opt/retropie2600/venv/bin/python -m pip install -U "pip>=21.3,<24" "setuptools>=64,<68" wheel
+
+# Install the package in editable mode (project is pyproject.toml-based, no setup.py)
+/opt/retropie2600/venv/bin/python -m pip install -e "/opt/retropie2600" --use-pep517
 
 # Create config directory
 sudo mkdir -p /etc/retropie2600/
@@ -116,7 +139,7 @@ For the Channel switch to work, ensure a CRT shader is configured. See `docs/ret
 
 ## 6. Boot Configuration
 
-Edit `/boot/config.txt` to enable wake-from-halt using the original Atari power switch.
+Edit `/boot/config.txt` to enable safe shutdown using the original Atari power switch.
 
 ```bash
 sudo nano /boot/config.txt
@@ -125,10 +148,10 @@ sudo nano /boot/config.txt
 Add the following line:
 
 ```text
-dtoverlay=gpio-shutdown,gpio_pin=26
+dtoverlay=gpio-shutdown,gpio_pin=26,active_low=0
 ```
 
-**Note**: This enables the Pi to boot back up when the power switch is flipped to ON after a safe shutdown (assuming the switch is wired to GPIO 26).
+**Note**: `active_low=0` means shutdown triggers on the rising edge (LOW→HIGH), which corresponds to the power switch being moved to Off. The internal pull-up (`gpio_pull=up`, the default) keeps BCM 26 HIGH when the switch is Off. Wake-from-halt via GPIO only works on **GPIO3** (a hardware SoC limitation), so BCM 26 cannot wake the Pi from a halted state — you must unplug and replug power.
 
 Optional: Add a temperature-controlled fan if installed:
 ```text
