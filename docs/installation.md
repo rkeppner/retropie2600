@@ -176,12 +176,13 @@ journalctl -u retropie2600 -f
 ```
 
 ### Test Each Switch
-- **Power switch (OFF)**: Should log "Safe shutdown initiated".
-- **Channel switch**: Should log "Shader toggle".
-- **TV Type switch**: Should log `SwitchEvent` for `tv_type`.
-- **Game Select**: Should log `SwitchEvent` for `game_select` pressed.
-- **Game Reset**: Should log `SwitchEvent` for `game_reset` pressed.
-- **Difficulty switches**: Should log `SwitchEvent` with position `a` or `b`.
+- **Power switch (OFF)**: Should log "Safe shutdown initiated" and halt the system.
+- **Power switch (ON)**: Silently ignored (wake-from-halt requires GPIO3; see boot config notes).
+- **Channel switch**: Should log `Switch event: channel → 2` or `→ 3`.
+- **TV Type switch**: Should log `Switch event: tv_type → color` or `→ bw`.
+- **Game Select**: Should log `Switch event: game_select → pressed` then `→ released`.
+- **Game Reset**: Should log `Switch event: game_reset → pressed` then `→ released`.
+- **Difficulty switches**: Should log `Switch event: difficulty_left → a` or `→ b` (same for right).
 
 ### Manual Shader Test
 Test the UDP connection to RetroArch (requires RetroArch to be running):
