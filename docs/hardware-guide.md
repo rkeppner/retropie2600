@@ -108,6 +108,14 @@ tv_type:
     low: "bw"
     high: "color"
   debounce_ms: 20
+
+power:
+  pin: 26         # Direct switch; BCM 26 (Physical 37); LOW=On, HIGH=Off
+  type: toggle
+  positions:
+    low: "on"
+    high: "off"
+  debounce_ms: 500
 ```
 
 ### Pull-Up Resistors
@@ -145,15 +153,25 @@ The following diagram illustrates the full connection path from the Atari board 
 - **Destination:** Raspberry Pi BCM 25 (Physical Pin 22).
 - **Logic:** LOW = B/Novice (F8), HIGH = A/Pro (F7).
 
-### Channel Switch (Toggle, direct)
-- **Note:** This switch does NOT wire through the RIOT socket. It is connected directly to the RF modulator circuit on the Atari board.
-- **Wiring:** Solder a wire directly from the switch signal contact to Raspberry Pi BCM 6 (Physical Pin 31).
-- **Logic:** LOW = Channel 3 (Shader OFF), HIGH = Channel 2 (Shader ON).
+### Channel Switch (Toggle, direct — SPDT, 3 contacts)
+- **Note:** This switch does NOT wire through the RIOT socket. It is a standard SPDT slide switch with 3 contacts (Left, Center, Right).
+- **Wiring:**
+  - **Center contact → Pi GND** (any ground pin, e.g., Physical Pin 34).
+  - **Right contact → Raspberry Pi BCM 6** (Physical Pin 31). This is the Ch 3 side.
+  - **Left contact** — leave unwired (Ch 2 side, not needed).
+- **Logic:** When set to Ch 3 (right), the right contact bridges to center (GND), pulling BCM 6 LOW. When set to Ch 2 (left), BCM 6 floats HIGH via internal pull-up.
+- **Result:** LOW = Channel 3 (Shader OFF), HIGH = Channel 2 (Shader ON).
 
-### Power Switch (Toggle, direct)
-- **Note:** This switch does NOT wire through the RIOT socket.
-- **Wiring:** Solder a wire directly from the switch contact to Raspberry Pi BCM 26 (Physical Pin 37).
-- **Function:** This pin is handled by the `gpio-shutdown` dtoverlay in the system configuration, allowing for safe shutdowns and hardware-level power-on.
+### Power Switch (Toggle, direct — non-standard 3-contact)
+- **Note:** This switch does NOT wire through the RIOT socket. It has 3 contacts (Top, Middle, Bottom) but is NOT a standard SPDT — see below.
+- **Switch behavior:** When **On** (up), all three contacts are bridged. When **Off** (down), only Bottom ↔ Middle are bridged; Top is disconnected.
+- **Wiring:**
+  - **Middle contact → Pi GND** (any ground pin, e.g., Physical Pin 39).
+  - **Top contact → Raspberry Pi BCM 26** (Physical Pin 37). This is the On side.
+  - **Bottom contact** — leave unwired.
+- **Logic:** When On, Top bridges to Middle (GND), pulling BCM 26 LOW. When Off, Top is disconnected and BCM 26 floats HIGH via internal pull-up.
+- **Result:** LOW = On, HIGH = Off. The `gpio-shutdown` overlay triggers shutdown on the LOW→HIGH transition (switch moved to Off).
+- **Function:** This pin is handled by the `gpio-shutdown` dtoverlay in the system configuration, allowing for safe shutdowns.
 
 ## 8. Power LED Installation
 
@@ -186,15 +204,17 @@ The Raspberry Pi should be oriented so the ports face the rear of the Atari case
 Add the following lines to your `/boot/config.txt` to enable system-level hardware features:
 
 ```text
-# Enable software-controlled shutdown and wake-from-halt
-dtoverlay=gpio-shutdown,gpio_pin=26
+# Enable software-controlled shutdown via power switch
+# active_low=0: shutdown triggers on rising edge (LOW→HIGH = switch moved to Off)
+# gpio_pull=up: internal pull-up (default) — correct for this wiring
+dtoverlay=gpio-shutdown,gpio_pin=26,active_low=0
 
 # Optional: Temperature controlled fan (turns on at 60°C)
 # Replace X with BCM pin if using a transistor/MOSFET driver
 # dtoverlay=gpio-fan,gpiopin=X,temp=60000
 ```
 
-**Note:** `gpio-shutdown` allows the power switch to trigger a clean shutdown and also allows the Pi to boot from a halted state by flipping the switch.
+**Note:** `gpio-shutdown` triggers a clean shutdown when the power switch is moved to Off (BCM 26 goes HIGH). Wake-from-halt via GPIO only works on **GPIO3** (a hardware SoC limitation), so BCM 26 cannot wake the Pi from a halted state — you must unplug and replug power, or wire a separate momentary button on GPIO3.
 
 ## 12. Testing Your Wiring
 
