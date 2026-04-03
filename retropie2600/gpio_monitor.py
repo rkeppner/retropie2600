@@ -197,7 +197,7 @@ class GPIOMonitor:
                 position=actual_position,
                 timestamp=time.time(),
             )
-            logger.debug("Switch event: %s → %s", switch_name, actual_position)
+            logger.info("Switch event: %s → %s", switch_name, actual_position)
             self._callback(event)
 
         return _on_edge

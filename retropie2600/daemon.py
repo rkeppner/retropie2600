@@ -68,8 +68,11 @@ class RetroPie2600Daemon:
 
         startup_states = self._gpio_monitor.read_all_states()
         for switch_name, position in startup_states.items():
-            key_name = f"{switch_name}_{position}"
-            self._input_injector.press_key(key_name)
+            self._on_switch_event(SwitchEvent(
+                switch_name=switch_name,
+                position=position,
+                timestamp=0.0,
+            ))
 
         _notifier.notify("READY=1")
         logger.info("retropie2600 daemon ready (config=%s)", self._config_path)
@@ -95,6 +98,8 @@ class RetroPie2600Daemon:
         if event.switch_name == "power" and event.position == "off":
             if self._shutdown_controller is not None:
                 self._shutdown_controller.initiate_shutdown()
+            return
+        if event.switch_name == "power":
             return
 
         if event.switch_name == "channel":
