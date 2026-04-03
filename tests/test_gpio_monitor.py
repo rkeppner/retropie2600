@@ -37,6 +37,9 @@ switches:
   power:
     pin: 26
     type: toggle
+    positions:
+      low: "on"
+      high: "off"
     debounce_ms: 500
   tv_type:
     pin: 4
@@ -245,10 +248,10 @@ def test_read_all_states_single_pin_toggle_returns_correct_position(tmp_path, mo
     monitor.start()
 
     mock_pigpio.read.return_value = 0
-    assert monitor.read_all_states() == {"tv_type": "bw"}
+    assert monitor.read_all_states() == {"power": "on", "tv_type": "bw"}
 
     mock_pigpio.read.return_value = 1
-    assert monitor.read_all_states() == {"tv_type": "color"}
+    assert monitor.read_all_states() == {"power": "off", "tv_type": "color"}
 
 
 def test_dual_pin_toggle_backward_compat_still_works(tmp_config, mock_pigpio, monkeypatch):
@@ -263,3 +266,49 @@ def test_dual_pin_toggle_backward_compat_still_works(tmp_config, mock_pigpio, mo
     monitor.start()
 
     assert monitor.read_all_states() == {"tv_type": "bw"}
+
+
+def test_power_single_pin_toggle_fires_on_low(tmp_path, mock_pigpio, monkeypatch):
+    callback = MagicMock()
+    config_path = _single_pin_toggle_config(tmp_path)
+    monitor, _ = _build_monitor(config_path, mock_pigpio, monkeypatch, callback=callback)
+    monitor.start()
+
+    handler = _registered_handler_for_pin(mock_pigpio, 26)
+    handler(26, 0, 123)
+
+    callback.assert_called_once()
+    event = callback.call_args.args[0]
+    assert isinstance(event, SwitchEvent)
+    assert event.switch_name == "power"
+    assert event.position == "on"
+
+
+def test_power_single_pin_toggle_fires_on_high(tmp_path, mock_pigpio, monkeypatch):
+    callback = MagicMock()
+    config_path = _single_pin_toggle_config(tmp_path)
+    monitor, _ = _build_monitor(config_path, mock_pigpio, monkeypatch, callback=callback)
+    monitor.start()
+
+    handler = _registered_handler_for_pin(mock_pigpio, 26)
+    handler(26, 1, 123)
+
+    callback.assert_called_once()
+    event = callback.call_args.args[0]
+    assert isinstance(event, SwitchEvent)
+    assert event.switch_name == "power"
+    assert event.position == "off"
+
+
+def test_read_all_states_power_single_pin_toggle(tmp_path, mock_pigpio, monkeypatch):
+    config_path = _single_pin_toggle_config(tmp_path)
+    monitor, _ = _build_monitor(config_path, mock_pigpio, monkeypatch)
+    monitor.start()
+
+    mock_pigpio.read.return_value = 0
+    states = monitor.read_all_states()
+    assert states["power"] == "on"
+
+    mock_pigpio.read.return_value = 1
+    states = monitor.read_all_states()
+    assert states["power"] == "off"

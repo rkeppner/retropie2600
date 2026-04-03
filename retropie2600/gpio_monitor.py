@@ -101,8 +101,6 @@ class GPIOMonitor:
             switch_type = SwitchType(switch_cfg.get("type", "toggle"))
             if switch_type != SwitchType.TOGGLE:
                 continue
-            if switch_name == "power":
-                continue
 
             single_pin_positions = self._get_single_pin_toggle_positions(
                 switch_name,
@@ -131,7 +129,7 @@ class GPIOMonitor:
         switch_cfg: dict,
         switch_type: SwitchType,
     ) -> Optional[Dict[str, str]]:
-        if switch_type != SwitchType.TOGGLE or switch_name == "power":
+        if switch_type != SwitchType.TOGGLE:
             return None
         if "pin" not in switch_cfg or "positions" not in switch_cfg:
             return None
@@ -156,10 +154,7 @@ class GPIOMonitor:
             return [(switch_cfg["pin"], "single_pin_toggle")]
 
         if "pin" in switch_cfg:
-            if switch_name == "power":
-                pins.append((switch_cfg["pin"], "off"))
-            else:
-                pins.append((switch_cfg["pin"], "pressed"))
+            pins.append((switch_cfg["pin"], "pressed"))
         if "pin_color" in switch_cfg:
             pins.append((switch_cfg["pin_color"], "color"))
         if "pin_bw" in switch_cfg:

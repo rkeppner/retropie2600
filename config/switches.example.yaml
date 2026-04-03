@@ -5,7 +5,10 @@
 switches:
   power:
     pin: 26
-    type: toggle  # software-only shutdown trigger
+    type: toggle
+    positions:
+      low: "on"       # LOW = switch On (top↔middle bridged to GND)
+      high: "off"     # HIGH = switch Off (top disconnected, pull-up)
     debounce_ms: 500
 
   tv_type:
