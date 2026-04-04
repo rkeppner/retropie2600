@@ -10,6 +10,7 @@ import threading
 from retropie2600.config import Config
 from retropie2600.gpio_monitor import GPIOMonitor, SwitchEvent
 from retropie2600.input_injector import InputInjector
+from retropie2600.power_led import PowerLED
 from retropie2600.shader_controller import ShaderController
 from retropie2600.shutdown_controller import ShutdownController
 
@@ -34,6 +35,7 @@ class RetroPie2600Daemon:
         self._config_path = config_path
         self._gpio_monitor: GPIOMonitor | None = None
         self._input_injector: InputInjector | None = None
+        self._power_led: PowerLED | None = None
         self._shader_controller: ShaderController | None = None
         self._shutdown_controller: ShutdownController | None = None
         self._shutdown_event = threading.Event()
@@ -57,6 +59,7 @@ class RetroPie2600Daemon:
                 delay_ms=config.shutdown["delay_ms"],
             )
             self._gpio_monitor = GPIOMonitor(config=config, callback=self._on_switch_event)
+            self._power_led = PowerLED(pin=config.power_led["pin"])
         except Exception as exc:
             logger.error("Failed to initialize subsystems: %s", exc)
             return 1
@@ -77,9 +80,15 @@ class RetroPie2600Daemon:
         _notifier.notify("READY=1")
         logger.info("retropie2600 daemon ready (config=%s)", self._config_path)
 
+        if self._power_led is not None:
+            self._power_led.start()
+            self._power_led.on()
+
         while not self._shutdown_event.wait(timeout=_WATCHDOG_INTERVAL):
             _notifier.notify("WATCHDOG=1")
 
+        if self._power_led is not None:
+            self._power_led.off()
         if self._gpio_monitor is not None:
             self._gpio_monitor.stop()
         if self._input_injector is not None:

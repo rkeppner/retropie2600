@@ -35,6 +35,9 @@ def test_daemon_loads_config_and_initializes_subsystems(tmp_config, monkeypatch)
     monkeypatch.setattr(daemon_module, "InputInjector", injector_ctor)
     monkeypatch.setattr(daemon_module, "ShaderController", shader_ctor)
     monkeypatch.setattr(daemon_module, "ShutdownController", shutdown_ctor)
+    mock_led = MagicMock()
+    led_ctor = MagicMock(return_value=mock_led)
+    monkeypatch.setattr(daemon_module, "PowerLED", led_ctor)
 
     daemon = _build_daemon(tmp_config)
     monkeypatch.setattr(daemon._shutdown_event, "wait", MagicMock(return_value=True))
@@ -146,6 +149,7 @@ def test_startup_sync_fires_key_for_active_toggle(tmp_config, monkeypatch):
     monkeypatch.setattr(daemon_module, "InputInjector", MagicMock(return_value=mock_injector))
     monkeypatch.setattr(daemon_module, "ShaderController", MagicMock(return_value=MagicMock()))
     monkeypatch.setattr(daemon_module, "ShutdownController", MagicMock(return_value=mock_shutdown))
+    monkeypatch.setattr(daemon_module, "PowerLED", MagicMock(return_value=MagicMock()))
 
     daemon = _build_daemon(tmp_config)
     monkeypatch.setattr(daemon._shutdown_event, "wait", MagicMock(return_value=True))
@@ -180,6 +184,7 @@ def test_sdnotify_fallback_when_import_fails(tmp_config, monkeypatch):
     mock_shutdown = MagicMock()
     mock_shutdown.is_shutting_down = False
     monkeypatch.setattr(daemon_module, "ShutdownController", MagicMock(return_value=mock_shutdown))
+    monkeypatch.setattr(daemon_module, "PowerLED", MagicMock(return_value=MagicMock()))
 
     daemon = daemon_module.RetroPie2600Daemon(tmp_config)
     monkeypatch.setattr(daemon._shutdown_event, "wait", MagicMock(return_value=True))
@@ -227,15 +232,53 @@ def test_shutdown_order_monitor_before_injector(tmp_config, monkeypatch):
     mock_injector = MagicMock()
     mock_injector.close.side_effect = lambda: call_order.append("injector_close")
 
+    mock_led = MagicMock()
+    mock_led.off.side_effect = lambda: call_order.append("led_off")
+
     monkeypatch.setattr(daemon_module, "GPIOMonitor", MagicMock(return_value=mock_monitor))
     monkeypatch.setattr(daemon_module, "InputInjector", MagicMock(return_value=mock_injector))
     monkeypatch.setattr(daemon_module, "ShaderController", MagicMock(return_value=MagicMock()))
     mock_shutdown = MagicMock()
     mock_shutdown.is_shutting_down = False
     monkeypatch.setattr(daemon_module, "ShutdownController", MagicMock(return_value=mock_shutdown))
+    monkeypatch.setattr(daemon_module, "PowerLED", MagicMock(return_value=mock_led))
 
     daemon = _build_daemon(tmp_config)
     monkeypatch.setattr(daemon._shutdown_event, "wait", MagicMock(return_value=True))
 
     assert daemon.run() == 0
-    assert call_order == ["monitor_stop", "injector_close"]
+    assert call_order == ["led_off", "monitor_stop", "injector_close"]
+
+
+def test_power_led_on_after_ready_off_on_shutdown(tmp_config, monkeypatch):
+    from retropie2600 import daemon as daemon_module
+
+    mock_config = MagicMock()
+    mock_config.shader = {"retroarch_host": "127.0.0.1", "retroarch_port": 55355}
+    mock_config.shutdown = {"command": "sudo shutdown -h now", "delay_ms": 500}
+    mock_config.power_led = {"pin": 12}
+
+    mock_monitor = MagicMock()
+    mock_monitor.read_all_states.return_value = {}
+
+    mock_led = MagicMock()
+    mock_shutdown = MagicMock()
+    mock_shutdown.is_shutting_down = False
+
+    monkeypatch.setattr(daemon_module.Config, "from_file", MagicMock(return_value=mock_config))
+    monkeypatch.setattr(daemon_module, "GPIOMonitor", MagicMock(return_value=mock_monitor))
+    monkeypatch.setattr(daemon_module, "InputInjector", MagicMock(return_value=MagicMock()))
+    monkeypatch.setattr(daemon_module, "ShaderController", MagicMock(return_value=MagicMock()))
+    monkeypatch.setattr(daemon_module, "ShutdownController", MagicMock(return_value=mock_shutdown))
+    led_ctor = MagicMock(return_value=mock_led)
+    monkeypatch.setattr(daemon_module, "PowerLED", led_ctor)
+
+    daemon = _build_daemon(tmp_config)
+    monkeypatch.setattr(daemon._shutdown_event, "wait", MagicMock(return_value=True))
+
+    assert daemon.run() == 0
+
+    led_ctor.assert_called_once_with(pin=12)
+    mock_led.start.assert_called_once()
+    mock_led.on.assert_called_once()
+    mock_led.off.assert_called_once()
